@@ -1,0 +1,9 @@
+Product manager
+	MENU: need give messenger again after enter invalid choice
+
+	case 1: need give messenger after enter code with code exception 
+		(give messenger after enter all fileds of product)
+
+	case 2: need update limit date of new product's infromation (case1 also)
+
+ 
