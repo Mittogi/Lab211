@@ -1,5 +1,7 @@
 package data.factory;
 
+import bussiness.entity.Product;
+import bussiness.entity.Receipt;
 import data.FileManager;
 import data.IFileManager;
 import data.factory.IDaoFactory;
@@ -13,28 +15,18 @@ import data.receiptdao.ReceiptDao;
  * @author PHAT
  */
 public class DaoFactory implements IDaoFactory{
-    IFileManager fileManager;
-    
-//contructor-------------------------------------------------
     public DaoFactory() {
     }
 
-    public DaoFactory(String inputDataFile) {
-        this.fileManager = new FileManager(inputDataFile);
-    }
-    
-//-----------------------------------------------------------
 
     @Override
-    public IProductDao productDao() throws Exception {
-        IProductDao productDao = new ProductDao(fileManager);
-        return productDao;
+    public IProductDao<Product> getProductDao() throws Exception {
+        return ProductDao.getInstance();
     }
 
     @Override
-    public IReceiptDao receiptDao() throws Exception {
-        IProductDao productDaoEmp = ProductDao.getInstance();
-        return new ReceiptDao(fileManager, productDaoEmp);
+    public IReceiptDao<Receipt> getReceiptDao() throws Exception {
+        return new ReceiptDao(getProductDao());
     }
     
     

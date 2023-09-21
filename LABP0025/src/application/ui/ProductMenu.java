@@ -13,16 +13,13 @@ import bussiness.services.productservice.IProductService;
  * @author PHAT
  */
 public class ProductMenu {
-//------------------------------------------------------------------------------
 
     IProductService<Product> service;
 
-//contructor--------------------------------------------------------------------
     public ProductMenu(IProductService<Product> service) {
         this.service = service;
     }
 
-//product menu------------------------------------------------------------------
     public void processMenuForProduct() {
 
         boolean quit = false;
@@ -35,15 +32,15 @@ public class ProductMenu {
                 int choice = Menu.getUserChoice();
 
                 switch (choice) {
-                    case 1: //add new product
+                    case 1:
                         addNewProduct();
                         break;
 
-                    case 2: //update product information
+                    case 2:
                         updateProductInformation();
                         break;
 
-                    case 3: //delete product
+                    case 3:
                         deleteProduct();
                         break;
 
@@ -61,28 +58,26 @@ public class ProductMenu {
                         break;
 
                 }
-            } while (quit == false);
-        } catch (Exception e) {
-        }
+            } while (!quit);
+        } catch (Exception ignored) {}
     }
 
-//user's choice-----------------------------------------------------------------
-    public Product getProduct() throws Exception {
-        String code = "";
-        String name = "";
-        int quantity = 0;
-        Date manufacturingDate = null;
-        Date expirationDate = null;
+    public Product getProduct() {
+        String code;
+        String name;
+        int quantity;
+        Date manufacturingDate;
+        Date expirationDate;
 
         while (true) {
             try {
                 code = DataInput.getString("Enter product's code : ").toUpperCase();
-                if (DataValidation.checkValueIsEmpty(code) == true) {
+                if (DataValidation.checkValueIsEmpty(code)) {
                     throw new Exception("Invalid due to empty");
                 }
 
                 name = DataInput.getString("Enter product's name: ").toUpperCase();
-                if (DataValidation.checkValueIsEmpty(name) == true) {
+                if (DataValidation.checkValueIsEmpty(name)) {
                     throw new Exception("Invalid due to empty");
                 }
 
@@ -99,72 +94,49 @@ public class ProductMenu {
         return new Product(code, name, quantity, manufacturingDate, expirationDate);
     }
 
-//case 1------------------------------------------------------------------------    
     public void addNewProduct() {
-        boolean continuous = true;
-
         do {
             try {
                 Product newProduct = getProduct();
                 List<Product> listProduct = service.getList();
 
-                if (DataValidation.checkNewProductIsValid(newProduct, listProduct) == true) {
+                if (DataValidation.checkNewProductIsValid(newProduct, listProduct)) {
                     service.add(newProduct);
 
                     System.out.println("Product added successfully.");
-                    Menu.print("Do you want to continuous add product or go back to main menu|1.Continuous|2.Back to main menu|Select: ");
+                    Menu.print("Do you want to continues(Y/N)");
 
-                    int choice = Menu.getUserChoice();
+                    boolean isContinue = DataInput.getString().matches("[y,Y]");
 
-                    switch (choice) {
-                        case 1: //continuous add product
-                            break;
-
-                        case 2: //Go back to main menu
-                            continuous = false;
-                            break;
-
-                        default:
-                            System.out.println("Choice invalid");
-                            break;
+                    if (!isContinue) {
+                        break;
                     }
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-        } while (continuous == true);
+        } while (true);
     }
 
-//case 2------------------------------------------------------------------------
     public List<String> getNewProductInformation() throws Exception {
         List<String> listNewInformation = new ArrayList<>();
-        String newName = "", newQuantity = "", newManufacturingDate = "", newExpirationDate = "";
+        String newName, newQuantity, newManufacturingDate, newExpirationDate;
 
         newName = DataInput.getString("Enter new name: ").toUpperCase();
 
-        while (true) {
+        do {
             newQuantity = DataInput.getString("Enter new quantity: ");
 
-            if (DataValidation.checkNewQuatiy(newQuantity) == true) {
-                break;
-            }
-        }
+        } while (!DataValidation.checkNewQuatiy(newQuantity));
 
-        while (true) {
+        do {
             newManufacturingDate = DataInput.getString("Enter new manufacturing date (yyyy-MM-dd): ");
 
-            if (DataValidation.checkNewDate(newManufacturingDate) == true) {
-                break;
-            }
-        }
+        } while (!DataValidation.checkNewDate(newManufacturingDate));
 
-        while (true) {
+        do {
             newExpirationDate = DataInput.getString("Enter new expiration date (yyyy-MM-dd): ");
-
-            if (DataValidation.checkNewDate(newExpirationDate) == true) {
-                break;
-            }
-        }
+        } while (!DataValidation.checkNewDate(newExpirationDate));
 
         listNewInformation.add(newName);
         listNewInformation.add(newQuantity);
@@ -174,7 +146,7 @@ public class ProductMenu {
         return listNewInformation;
     }
 
-    public void updateProductInformation() throws Exception {
+    public void updateProductInformation() {
         try {
             String productCodeUpdated = DataInput.getString("Enter product's code need updated: ");
             Product productUpdated = service.findProduct(productCodeUpdated);
@@ -193,7 +165,6 @@ public class ProductMenu {
         }
     }
 
-//case 3------------------------------------------------------------------------
     public void deleteProduct() throws Exception {
         try {
             String productCodeDeleted = DataInput.getString("Enter product's code need deleted: ");
@@ -225,7 +196,6 @@ public class ProductMenu {
         }
     }
 
-//case 4------------------------------------------------------------------------
     public void printAllProduct() {
         try {
             service.printList();

@@ -1,6 +1,8 @@
 package application.ui;
 
 import application.utilities.DataInput;
+import bussiness.entity.Product;
+import bussiness.entity.Receipt;
 import bussiness.services.productservice.ProductService;
 import java.util.Collections;
 import bussiness.services.productservice.IProductService;
@@ -17,14 +19,13 @@ public class Program {
     public static void main(String[] args) {
         int choice;
         boolean quit = false;
-        String productInputFile = "D:\\study\\Semester_3\\LAB211\\code\\LABP0025\\src\\product.txt";
-        String receiptInputFile = "D:\\study\\Semester_3\\LAB211\\code\\LABP0025\\src\\warehouse.txt";
-        
+
         System.out.println(String.join("", Collections.nCopies(10, "**********")));
     
         try {
-            IProductService productService = new ProductService(productInputFile);
-            IReceiptService receiptService = new ReceiptService(receiptInputFile);
+            IProductService<Product> productService = new ProductService();
+            IReceiptService<Receipt> receiptService = new ReceiptService();
+
             do {
                 Menu.print("1.Producct Management|2.Warehouse Management|3.Exit|Select:");
                 choice = DataInput.getIntegerNumber();
@@ -43,7 +44,7 @@ public class Program {
                         break;
                     }
                 }
-            } while (quit == false);
+            } while (!quit);
         } catch (Exception e) {
                 System.out.println(e.getMessage());
         }

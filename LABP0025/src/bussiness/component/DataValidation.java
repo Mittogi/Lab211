@@ -48,11 +48,11 @@ public final class DataValidation {
         Date newProductManufacturingDate = newProduct.getManufacturingDate();
         Date newProductExpirationDate = newProduct.getExpirationDate();
         
-        if (DataValidation.checkCodeIsValid(newProductCode, "P") == false) {
+        if (!DataValidation.checkCodeIsValid(newProductCode, "P")) {
             result = false;
         }
         
-        if (DataValidation.checkCodeIsDulicated(newProductCode, listProduct) == true) {
+        if (DataValidation.checkCodeIsDulicated(newProductCode, listProduct)) {
             result = false;
         }
         

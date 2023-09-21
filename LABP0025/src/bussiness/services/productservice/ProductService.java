@@ -1,6 +1,7 @@
 package bussiness.services.productservice;
 
 import bussiness.entity.Product;
+import data.FileManager;
 import data.factory.DaoFactory;
 import data.factory.IDaoFactory;
 import data.productdao.IProductDao;
@@ -12,23 +13,21 @@ import java.util.List;
  */
 public class ProductService implements IProductService<Product> {
 
-    IProductDao productAction;
+    IProductDao<Product> productAction;
     IDaoFactory productDaoFactory;
 
-//contructor--------------------------------------------------------------------    
-    public ProductService(String inputDataFile) throws Exception {
-        productDaoFactory = new DaoFactory(inputDataFile);
-        this.productAction = productDaoFactory.productDao();
+    public ProductService() throws Exception {
+        productDaoFactory = new DaoFactory();
+        this.productAction = productDaoFactory.getProductDao();
     }
 
-//------------------------------------------------------------------------------
     @Override
-    public void printList() throws Exception {
+    public void printList() {
         productAction.getList().forEach(obj -> System.out.println(obj));
     }
 
     @Override
-    public List<Product> getList() throws Exception {
+    public List<Product> getList() {
         return productAction.getList();
     }
 

@@ -1,5 +1,7 @@
 package data.factory;
 
+import bussiness.entity.Product;
+import bussiness.entity.Receipt;
 import data.productdao.IProductDao;
 import data.receiptdao.IReceiptDao;
 
@@ -8,7 +10,7 @@ import data.receiptdao.IReceiptDao;
  * @author PHAT
  */
 public interface IDaoFactory {
-    IProductDao productDao() throws Exception;
+    IProductDao<Product> getProductDao() throws Exception;
     
-    IReceiptDao receiptDao() throws Exception;
+    IReceiptDao<Receipt> getReceiptDao() throws Exception;
 }

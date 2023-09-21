@@ -14,29 +14,24 @@ import java.util.List;
  * @author PHAT
  */
 public class ProductDao implements IProductDao<Product> {
-//Declare an arraylist to store Product data------------------------------------
 
-    IFileManager<Product> fileManager;
+    IFileManager fileManager;
     List<Product> productList = new ArrayList<>();
 
-//contructor--------------------------------------------------------------------
-    public ProductDao() {
-    }
-
-    public ProductDao(IFileManager fileManager) throws Exception {
-        this.fileManager = fileManager;
+    public ProductDao() throws Exception {
+        fileManager = new FileManager<Product>(
+                FileManager.productFileName
+        );
         loadDataFromFile();
     }
 
 //singleton design pattern------------------------------------------------------
-    private static IProductDao INSTANCE = null;
+    private static IProductDao<Product> INSTANCE = null;
 
-    public static IProductDao getInstance() throws Exception {
+    public static IProductDao<Product> getInstance() throws Exception {
         if (INSTANCE == null) {
             synchronized (ProductDao.class) {
-                IFileManager fileManager = new FileManager(FileManager.productFileName);
-            
-                INSTANCE = new ProductDao(fileManager);
+                INSTANCE = new ProductDao();
             }
         }
         return INSTANCE;
@@ -65,15 +60,15 @@ public class ProductDao implements IProductDao<Product> {
     }
 
     @Override
-    public void addNew(Product obj) throws Exception {
+    public void addNew(Product obj) {
         productList.add(obj);
     }
 
     @Override
-    public List<Product> getList() throws Exception {
-        if (productList.isEmpty()) {
-            throw new Exception("Product list is empty");
-        }
+    public List<Product> getList() {
+//        if (productList.isEmpty()) {
+//            throw new Exception("Product list is empty");
+//        }
 
         return productList;
     }

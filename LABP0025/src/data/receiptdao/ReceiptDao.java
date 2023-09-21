@@ -2,9 +2,10 @@ package data.receiptdao;
 
 import bussiness.entity.Product;
 import bussiness.entity.Receipt;
+import data.FileManager;
 import data.IFileManager;
 import data.productdao.IProductDao;
-import data.productdao.ProductDao;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,22 +17,16 @@ import java.util.List;
  * @author PHAT
  */
 public class ReceiptDao implements IReceiptDao<Receipt> {
-//Declare an arraylist to store Receipt data------------------------------------
     IProductDao<Product> productAction;
-    IFileManager<Receipt> fileManager;
+    IFileManager fileManager;
     List<Receipt> receiptList = new ArrayList<>();
 
-//Contructor--------------------------------------------------------------------
-    public ReceiptDao() {
-    }
-
-    public ReceiptDao(IFileManager fileManager, IProductDao producDao) throws Exception{
-        this.productAction = producDao;
-        this.fileManager = fileManager;
+    public ReceiptDao(IProductDao<Product> productDao) throws Exception{
+        this.productAction = productDao;
+        this.fileManager = new FileManager<Receipt>(FileManager.receiptFileName);
         loadDataFromFile();
     }
 
-//method implement--------------------------------------------------------------
     @Override
     public void loadDataFromFile() throws Exception {
         String code;
@@ -62,16 +57,16 @@ public class ReceiptDao implements IReceiptDao<Receipt> {
     }
 
     @Override
-    public void addNew(Receipt obj) throws Exception {
+    public void addNew(Receipt obj) {
         receiptList.add(obj);
     }
 
     @Override
-    public List<Receipt> getList() throws Exception {
-        if (receiptList.isEmpty()) {
-            throw new Exception("Product is empty");
-        }
-        
+    public List<Receipt> getList() {
+//        if (receiptList.isEmpty()) {
+//            throw new Exception("Product is empty");
+//        }
+//
         return receiptList;
     }
     

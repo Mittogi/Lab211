@@ -11,13 +11,13 @@ import java.util.List;
  * @author PHAT
  */
 public class ReceiptService implements IReceiptService<Receipt>{
-    IReceiptDao receiptAction;
+    IReceiptDao<Receipt> receiptAction;
     IDaoFactory receiptDaoFactory;
     
 //contructor--------------------------------------------------------------------
-    public ReceiptService(String inputDataFile) throws Exception {
-        receiptDaoFactory = new DaoFactory(inputDataFile);
-        this.receiptAction = receiptDaoFactory.receiptDao();
+    public ReceiptService() throws Exception {
+        receiptDaoFactory = new DaoFactory();
+        this.receiptAction = receiptDaoFactory.getReceiptDao();
     }
 
 //------------------------------------------------------------------------------    
