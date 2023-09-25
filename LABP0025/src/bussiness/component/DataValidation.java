@@ -2,9 +2,7 @@ package bussiness.component;
 
 import application.utilities.DataInput;
 import bussiness.entity.Product;
-import bussiness.services.productservice.ProductService;
-import java.util.ArrayList;
-import java.util.Arrays;
+import bussiness.entity.Receipt;
 import java.util.Date;
 import java.util.List;
 
@@ -35,96 +33,17 @@ public final class DataValidation {
         return value.matches(pattern); //true if String matches pattern
     }
 
-//case 1 product manager--------------------------------------------------------
-    public static boolean checkNewProductIsValid(Product newProduct, List<Product> listProduct) throws Exception {
-        boolean result = true;
-        
-        newProduct.setCode(newProduct.getCode().toUpperCase());
-        newProduct.setName(newProduct.getName().toUpperCase());
-        
-        String newProductCode = newProduct.getCode();
-        String newProductName = newProduct.getName();
-        int newProductQuantity = newProduct.getQuantity();
-        Date newProductManufacturingDate = newProduct.getManufacturingDate();
-        Date newProductExpirationDate = newProduct.getExpirationDate();
-        
-        if (!DataValidation.checkCodeIsValid(newProductCode, "P")) {
-            result = false;
-        }
-        
-        if (DataValidation.checkCodeIsDulicated(newProductCode, listProduct)) {
-            result = false;
-        }
-        
-        if (newProductQuantity < 0) {
-            result = false;
-        }
-        
-        return result;
-    }
-    
-    public static boolean checkCodeIsValid(String code, String firstCharacter) throws Exception{
-        boolean result = true;
-        
-//        if (checkValueIsEmpty(code) == true) {
-//            result = false;
-//        }
-        
-        if (checkValueLengthInRange(code, 8, 8) == false) {
-            result = false;
-        }
-
-        ArrayList<String> splitedString = new ArrayList<>();
-        splitedString.add(code.substring(0, 1));
-        splitedString.add(code.substring(1));
-
-        if (splitedString.get(0).matches(firstCharacter) == false) {
-            result = false;
-        }
-
-        try {
-            int number = Integer.parseInt(splitedString.get(1));
-        } catch (Exception e) {
-            result = false;
-        }
-        
-        if (result == false) {
-            throw new Exception("Code is invalid. The correct code is Pxxxxxxx with x is digit");
-        }
-
-        return result;
-    }
-
-    public static boolean checkCodeIsDulicated(String code, List<Product> productList) throws Exception {
-        boolean result = false;
-
-        for (Product oldProduct : productList) {
-            String oldProductCode = oldProduct.getCode();
-
-            if (code.equalsIgnoreCase(oldProductCode)) {
-                result = true;
-                break;
-            }
-        }
-        
-        if (result == true) {
-            throw new Exception("Code is dulicated");
-        }
-
-        return result;
-    }
-    
-//case 2------------------------------------------------------------------------    
+//product manager--------------------------------------------------------
     public static boolean checkNewQuatiy(String value) {
         boolean result = true;
-        
+
         if (checkValueIsEmpty(value) == true) {
             return true;
         }
-        
+
         try {
             int number = DataInput.convertStringToInt(value);
-            
+
             if (number < 0) {
                 result = false;
                 throw new Exception();
@@ -133,26 +52,110 @@ public final class DataValidation {
             System.out.println("Data invalid");
             result = false;
         }
-        
+
         return result;
     }
-    
-    public static boolean checkNewDate(String value) {
-        boolean result = true;
-        
-        if (checkValueIsEmpty(value) == true) {
-            return true;
+
+    public static boolean checkProductCodeIsDulicated(String code, List<Product> list) {
+        boolean result = false;
+
+        for (Product oldItem : list) {
+            String oldItemCode = oldItem.getCode();
+
+            if (code.equalsIgnoreCase(oldItemCode)) {
+                result = true;
+                break;
+            }
         }
-        
-        try {
-            Date date = DataInput.convertStringToDate(value);
-        } catch (Exception e) {
-            System.out.println("Date is invalid. The correct format is yyyy-MM-dd");
+
+        return result;
+    }
+
+    public static boolean checkNewDate(String date) {
+        boolean result = true;
+
+        if (checkValueIsEmpty(date) == true) {
+            return false;
+        }
+
+        if (date.length() != 10) {
             result = false;
         }
-        
+        String[] dateParts = date.split("-");
+        if (dateParts.length != 3) {
+            result = false;
+        }
+        int day = Integer.parseInt(dateParts[0]);
+        int month = Integer.parseInt(dateParts[1]);
+        int year = Integer.parseInt(dateParts[2]);
+
+        if (month < 1 || month > 12) {
+            result = false;
+        }
+        if (year < 1) {
+           result = false;
+        }
+        if (month == 4 || month == 6 || month == 9 || month == 11) {
+            if (day > 30 || day < 1) {
+                result = false;
+            }
+        } else if (month != 2) {
+            if (day > 31 || day < 1) {
+                result = false;
+            }
+        }
+        if ((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0)) {
+            if (month == 2 && (day > 29 || day < 1)) {
+                result = false;
+            }
+        } else {
+            if (month == 2 && (day > 28 || day < 1)) {
+                result = false;
+            }
+        }
+
         return result;
     }
-    
-//case 3------------------------------------------------------------------------
+
+//receipt manager---------------------------------------------------------------
+    public static boolean checkRecieptCodeIsDulicated(String code, List<Receipt> list) {
+        boolean result = false;
+
+        for (Receipt oldItem : list) {
+            String oldItemCode = oldItem.getCode();
+
+            if (code.equalsIgnoreCase(oldItemCode)) {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    public static boolean checkProductOfReceiptIsDulicated(String productCode, List<Product> productListOfReceipt) {
+        boolean result = false;
+
+        for (Product product : productListOfReceipt) {
+            if (product.getCode().equalsIgnoreCase(productCode) == true) {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    public static boolean checkProductIsExist(String code, List<Product> productList) {
+        boolean result = false;
+
+        for (Product product : productList) {
+            if (product.getCode().equalsIgnoreCase(code) == true) {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
+    }
 }

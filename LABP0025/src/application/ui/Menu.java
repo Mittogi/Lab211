@@ -1,6 +1,7 @@
 package application.ui;
 
 import application.utilities.DataInput;
+import bussiness.entity.Product;
 import java.util.Arrays;
 import bussiness.services.IService;
 import bussiness.services.productservice.IProductService;
@@ -34,10 +35,13 @@ public class Menu {
         empMenu.processMenuForProduct();
     }
     
-    public static void manageReceipt(IReceiptService service) {
-        ReceiptMenu empMenu = new ReceiptMenu(service);
+    public static void manageReceipt(IReceiptService service, IProductService<Product> productService) {
+        ReceiptMenu empMenu = new ReceiptMenu(service, productService);
         empMenu.processMenuForReceipt();
     }
 
-           
+    public static void manageReport(IReceiptService receiptService, IProductService<Product> productService) {
+        ReportMenu empMenu = new ReportMenu(productService, receiptService);
+        empMenu.processMenuForReport();
+    }
 }

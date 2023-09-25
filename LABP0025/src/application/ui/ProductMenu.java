@@ -32,64 +32,92 @@ public class ProductMenu {
                 int choice = Menu.getUserChoice();
 
                 switch (choice) {
-                    case 1:
+                    case 1 ->
                         addNewProduct();
-                        break;
 
-                    case 2:
+                    case 2 ->
                         updateProductInformation();
-                        break;
 
-                    case 3:
+                    case 3 ->
                         deleteProduct();
-                        break;
 
-                    case 4: //Show all product
+                    case 4 -> {
                         System.out.println("Product list:");
                         printAllProduct();
-                        break;
+                    }
 
-                    case 5:
+                    case 5 ->
                         quit = true;
-                        break;
 
-                    default:
+                    default ->
                         System.out.println("Choice invalid");
-                        break;
 
                 }
             } while (!quit);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
-    public Product getProduct() {
+    public Product getProductFromUser() throws Exception {
         String code;
         String name;
         int quantity;
         Date manufacturingDate;
         Date expirationDate;
 
-        while (true) {
-            try {
-                code = DataInput.getString("Enter product's code : ").toUpperCase();
-                if (DataValidation.checkValueIsEmpty(code)) {
-                    throw new Exception("Invalid due to empty");
-                }
+        do {
+            boolean valid = true;
 
-                name = DataInput.getString("Enter product's name: ").toUpperCase();
-                if (DataValidation.checkValueIsEmpty(name)) {
-                    throw new Exception("Invalid due to empty");
-                }
+            code = DataInput.getString("Enter product's code: ").toUpperCase();
 
-                quantity = DataInput.getIntegerNumber("Enter product's quantity: ");
-                manufacturingDate = DataInput.getDate("Enter product's manufacturing date (Format: yyyy-mm-dd): ");
-                expirationDate = DataInput.getDate("Enter product's expiration date (Format: yyyy-mm-dd): ");
-
-                break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+            if (DataValidation.checkStringWithFormat(code, "^P\\d{7}") == false) {
+                System.out.println("Code is invalid. The correct code is Pxxxxxxx with x is digit");
+                valid = false;
             }
-        }
+
+            if (DataValidation.checkProductCodeIsDulicated(code, service.getList()) == true) {
+                System.out.println("Code id duplicated.");
+                valid = false;
+            }
+
+            if (valid == true) {
+                break;
+            }
+        } while (true);
+
+        do {
+            boolean valid = true;
+
+            name = DataInput.getString("Enter product's name: ").toUpperCase().trim();
+
+            if (DataValidation.checkValueIsEmpty(name) == true) {
+                System.out.println("Name is empty");
+                valid = false;
+            }
+
+            if (valid == true) {
+                break;
+            }
+        } while (true);
+
+        do {
+            boolean result = true;
+
+            quantity = DataInput.getIntegerNumber("Enter product's quantity: ");
+
+            if (quantity < 0) {
+                System.out.println("Data invalid");
+                result = false;
+            }
+
+            if (result == true) {
+                break;
+            }
+        } while (true);
+
+        manufacturingDate = DataInput.getDate("Enter product's manufacturing date(dd-MM-yyyy): ");
+
+        expirationDate = DataInput.getDate("Enter product's expiration datedd-MM-yyyy): ");
 
         return new Product(code, name, quantity, manufacturingDate, expirationDate);
     }
@@ -97,21 +125,19 @@ public class ProductMenu {
     public void addNewProduct() {
         do {
             try {
-                Product newProduct = getProduct();
-                List<Product> listProduct = service.getList();
+                Product newProduct = getProductFromUser();
 
-                if (DataValidation.checkNewProductIsValid(newProduct, listProduct)) {
-                    service.add(newProduct);
+                service.add(newProduct);
 
-                    System.out.println("Product added successfully.");
-                    Menu.print("Do you want to continues(Y/N)");
+                System.out.println("Product added successfully.");
+                Menu.print("Do you want to continues(Y/N)");
 
-                    boolean isContinue = DataInput.getString().matches("[y,Y]");
+                boolean isContinue = DataInput.getString().matches("[y,Y]");
 
-                    if (!isContinue) {
-                        break;
-                    }
+                if (!isContinue) {
+                    break;
                 }
+
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -122,20 +148,18 @@ public class ProductMenu {
         List<String> listNewInformation = new ArrayList<>();
         String newName, newQuantity, newManufacturingDate, newExpirationDate;
 
-        newName = DataInput.getString("Enter new name: ").toUpperCase();
+        newName = DataInput.getString("Enter new name: ").toUpperCase().trim();
 
         do {
             newQuantity = DataInput.getString("Enter new quantity: ");
-
         } while (!DataValidation.checkNewQuatiy(newQuantity));
 
         do {
-            newManufacturingDate = DataInput.getString("Enter new manufacturing date (yyyy-MM-dd): ");
-
+            newManufacturingDate = DataInput.getString("Enter new manufacturing date (dd-MM-yyyy): ");
         } while (!DataValidation.checkNewDate(newManufacturingDate));
 
         do {
-            newExpirationDate = DataInput.getString("Enter new expiration date (yyyy-MM-dd): ");
+            newExpirationDate = DataInput.getString("Enter new expiration date (dd-MM-yyyy): ");
         } while (!DataValidation.checkNewDate(newExpirationDate));
 
         listNewInformation.add(newName);
@@ -174,33 +198,38 @@ public class ProductMenu {
             if (productDeleted == null) {
                 throw new Exception("Product does not exits");
             }
-            
+
             Menu.print("Are you sure to delete product?|1.Yes|2.No|Select: ");
             choice = Menu.getUserChoice();
-            
+
             switch (choice) {
                 case 1:
                     service.deleteProduct(productDeleted);
                     System.out.println("Product deleted successfully.");
                     break;
-                    
+
                 case 2:
                     break;
-                    
+
                 default:
                     throw new Exception("Choice is invalid");
             }
-            
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void printAllProduct() {
-        try {
-            service.printList();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+    public void printAllProduct() throws Exception {
+
+        if (service.getList().isEmpty() == true) {
+            System.out.println("Product list is empty");
+        } else {
+            try {
+                service.printList();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 }

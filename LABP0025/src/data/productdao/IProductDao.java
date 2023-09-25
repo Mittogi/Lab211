@@ -12,9 +12,11 @@ import java.util.List;
 public interface IProductDao<Product> extends IUserDao<Product>{
     void loadDataFromFile() throws Exception; 
     
-    Product findProduct(String code) throws Exception;
+    Product findProduct(String code);
     
     void updateProductInformation(List<String> listInformation, Product productUpdated) throws Exception;
 
     void deleteProduct(Product productDeleted) throws Exception;
+    
+    void saveFile() throws Exception;
 }

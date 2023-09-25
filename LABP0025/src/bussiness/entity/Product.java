@@ -1,5 +1,7 @@
 package bussiness.entity;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -7,13 +9,11 @@ import java.util.Date;
  * @author PHAT
  */
 public class Product extends Items {
-//fileds------------------------------------------------------------------------
     private String name;
     private int quantity;
     private Date  manufacturingDate;
     private Date  expirationDate;
     
-//contructor-------------------------------------------------------------------- 
     public Product(String code, String name, int quantity, Date manufacturingDate, Date expirationDate) {
         super(code);        
         this.name = name;
@@ -22,7 +22,6 @@ public class Product extends Items {
         this.expirationDate = expirationDate;
     }
     
- //get and set------------------------------------------------------------------
     @Override
     public String getCode() {
         return code;
@@ -66,15 +65,18 @@ public class Product extends Items {
         this.expirationDate = expirationDate;
     }
     
-//------------------------------------------------------------------------------
-
-    
-//toString----------------------------------------------------------------------    
     @Override
     public String toString() {
-        return "code = " + code + " ,name = " + name + " ,quatity = " + quantity + ", manufacturingDate = " + manufacturingDate + ", expirationDate = " + expirationDate + '}';
+        return "code = " + code + ", name = " + name + ", quatity = " + quantity + ", manufacturingDate = " + formatDateToString(manufacturingDate) + ", expirationDate = " + formatDateToString(expirationDate);
     }
-
     
+    public String toRawData() {
+        return code + ", " + name + ", " + quantity + ", " + formatDateToString(manufacturingDate) + ", " + formatDateToString(expirationDate);
+    }
     
+    private String formatDateToString(Date date) { 
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+      
+        return dateFormat.format(date);
+    }
 }

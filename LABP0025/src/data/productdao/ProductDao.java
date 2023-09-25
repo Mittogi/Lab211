@@ -25,7 +25,6 @@ public class ProductDao implements IProductDao<Product> {
         loadDataFromFile();
     }
 
-//singleton design pattern------------------------------------------------------
     private static IProductDao<Product> INSTANCE = null;
 
     public static IProductDao<Product> getInstance() throws Exception {
@@ -37,7 +36,6 @@ public class ProductDao implements IProductDao<Product> {
         return INSTANCE;
     }    
     
-//method implemented------------------------------------------------------------
     @Override
     public void loadDataFromFile() throws Exception {
         String code, name;
@@ -67,14 +65,14 @@ public class ProductDao implements IProductDao<Product> {
     @Override
     public List<Product> getList() {
 //        if (productList.isEmpty()) {
-//            throw new Exception("Product list is empty");
+//            System.out.println("Product list is empty");
 //        }
 
         return productList;
     }
 
     @Override
-    public Product findProduct(String code) throws Exception {
+    public Product findProduct(String code) {
         Product product = null;
         List<Product> listProduct = getList();
 
@@ -91,7 +89,7 @@ public class ProductDao implements IProductDao<Product> {
 //------------------------------------------------------------------------------
     public Date convertStringToDate(String string) throws Exception {
         Date date;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         date = dateFormat.parse(string);
 
         return date;
@@ -101,7 +99,6 @@ public class ProductDao implements IProductDao<Product> {
         return Integer.parseInt(string);
     }
 
-//Update product----------------------------------------------------------------
     @Override
     public void updateProductInformation(List<String> listInformation, Product productUpdated) throws Exception {
         if (listInformation.get(0).equalsIgnoreCase("") == false) {
@@ -127,7 +124,6 @@ public class ProductDao implements IProductDao<Product> {
         }
     }
 
-//delete product----------------------------------------------------------------
     @Override
     public void deleteProduct(Product productDeleted) throws Exception {
         try {      
@@ -136,5 +132,10 @@ public class ProductDao implements IProductDao<Product> {
         } catch (Exception e) {
             System.out.println("Delete fail");
         }
+    }
+
+    @Override
+    public void saveFile() throws Exception {
+        fileManager.writeProductToFile(getList());
     }
 }

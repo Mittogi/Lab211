@@ -10,12 +10,10 @@ import java.util.Scanner;
  * @author PHAT
  */
 public class DataInput {
-//get number with message-------------------------------------------------------
     public static int getIntegerNumber (String displayMessage) {
         int number = 0;
         Scanner sc = new Scanner(System.in);
     
-    //get number method
         while (true) {
             try {
                 System.out.print(displayMessage);
@@ -25,16 +23,14 @@ public class DataInput {
                 System.out.println("Data invalid");
             }
         }
-    //------------------
         return number;
         }
  
-//get number without message----------------------------------------------------
     public static int getIntegerNumber () {
         int number = 0;
         Scanner sc = new Scanner(System.in);
     
-    //get number method
+    
         while (true) {
             try {
                 number = Integer.parseInt(sc.nextLine());
@@ -43,12 +39,11 @@ public class DataInput {
                 System.out.println("Data invalid");
             }
         }
-    //------------------
+    
         return number;
         }
     
-//get string with message-------------------------------------------------------
-    public static String getString (String displayMessage) throws Exception {
+    public static String getString (String displayMessage) {
         String s;
         Scanner sc = new Scanner(System.in);
                 
@@ -59,8 +54,7 @@ public class DataInput {
         return s;
     }
     
-//get string without message----------------------------------------------------
-    public static String getString () throws Exception {
+    public static String getString () {
         String s;
         Scanner sc = new Scanner(System.in);
                 
@@ -69,7 +63,6 @@ public class DataInput {
         return s;
     }
     
-//get Date with message---------------------------------------------------------
     public static Date getDate(String displayMessage) {
         Date date;
         Scanner sc = new Scanner(System.in);
@@ -80,14 +73,13 @@ public class DataInput {
             date = convertStringToDate(sc.nextLine());
             break;
         } catch (Exception e) {
-            System.out.println("Date is invalid:");
+            System.out.println("Date is invalid. The correct format is dd-MM-yyyy:");
         }
         }
         
         return date;
     }
     
-//get Date without message------------------------------------------------------
     public static Date getDate() {
         Date date;
         Scanner sc = new Scanner(System.in);
@@ -104,10 +96,19 @@ public class DataInput {
         return date;
     }
     
-//convert String----------------------------------------------------------------
+    public static Date getCurrentDate() {
+        Date date = new Date();
+        return date;
+    }
+    
     public static Date convertStringToDate(String string) throws Exception{
         Date date;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        
+        if (DataValidation.checkNewDate(string) == false){
+            throw new Exception();
+        }
+        
         date = dateFormat.parse(string);
        
         return date;

@@ -27,28 +27,31 @@ public class Program {
             IReceiptService<Receipt> receiptService = new ReceiptService();
 
             do {
-                Menu.print("1.Producct Management|2.Warehouse Management|3.Exit|Select:");
+                Menu.print("1.Producct Management|2.Warehouse Management|3.Report|Other.Exit|Select:");
                 choice = DataInput.getIntegerNumber();
                 switch (choice) {
-                    case 1: {
+                    case 1 ->  {
                         Menu.manageProduct(productService);
-                        break;
-                    }    
-                    case 2: {
-                        Menu.manageReceipt(receiptService);
-                        break;
                     }
-                    default: {
+                    case 2 ->  {
+                        Menu.manageReceipt(receiptService, productService);
+                    }
+                    
+                    case 3 -> {
+                        Menu.manageReport(receiptService, productService);
+                    }
+                    
+                    default ->  {
                         System.out.println("Good bye");
                         quit = true;
-                        break;
                     }
                 }
-            } while (!quit);
+            } while (quit == false);
         } catch (Exception e) {
                 System.out.println(e.getMessage());
         }
     }
+    
         
 }
 

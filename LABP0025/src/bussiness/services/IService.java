@@ -11,7 +11,7 @@ import java.util.List;
 public interface IService<T> {
     //Repository      
     void printList() throws Exception ;   
-    List<T> getList() throws Exception;    
+    List<T> getList();    
     void add(T obj) throws Exception;
     
 
