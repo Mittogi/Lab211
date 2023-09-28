@@ -34,8 +34,8 @@ public class ProductDao implements IProductDao<Product> {
             }
         }
         return INSTANCE;
-    }    
-    
+    }
+
     @Override
     public void loadDataFromFile() throws Exception {
         String code, name;
@@ -86,6 +86,31 @@ public class ProductDao implements IProductDao<Product> {
         return product;
     }
 
+    @Override
+    public List<Product> findProductByName(String name) {
+        List<Product> listProductResult = new ArrayList<>();
+        List<Product> listProduct = getList();
+
+        for (Product product : listProduct) {
+            if (product.getName().equalsIgnoreCase(name) == true) {
+                listProductResult.add(product);
+            }
+        }
+
+        return listProductResult;
+    }
+
+    @Override
+    public void deleteProductByQuantity(int value) {
+        List<Product> listProduct = getList();
+        
+        for (Product product : listProduct) {
+            if (product.getQuantity() == value) {
+                listProduct.remove(product);
+            }
+        }
+    }
+
 //------------------------------------------------------------------------------
     public Date convertStringToDate(String string) throws Exception {
         Date date;
@@ -126,7 +151,7 @@ public class ProductDao implements IProductDao<Product> {
 
     @Override
     public void deleteProduct(Product productDeleted) throws Exception {
-        try {      
+        try {
             List<Product> listProduct = getList();
             listProduct.remove(productDeleted);
         } catch (Exception e) {
@@ -138,4 +163,5 @@ public class ProductDao implements IProductDao<Product> {
     public void saveFile() throws Exception {
         fileManager.writeProductToFile(getList());
     }
+
 }

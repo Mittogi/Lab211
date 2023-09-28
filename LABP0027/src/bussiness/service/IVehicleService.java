@@ -10,5 +10,9 @@ public interface IVehicleService {
     
     List<Vehicle> getListVehicle();
     
+    void deleteVehicle(Vehicle vehicle);
     
+    Vehicle searchById(String id);
+    
+    List<Vehicle> searchByName(String name);
 }

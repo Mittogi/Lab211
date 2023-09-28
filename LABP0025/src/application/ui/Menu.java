@@ -44,4 +44,14 @@ public class Menu {
         ReportMenu empMenu = new ReportMenu(productService, receiptService);
         empMenu.processMenuForReport();
     }
+    
+    public static void saveDataToFile(IReceiptService receiptService, IProductService<Product> productService) {
+        try {
+            receiptService.saveFile();
+            productService.saveFile();
+            System.out.println("Save successful");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

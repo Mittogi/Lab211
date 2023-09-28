@@ -27,7 +27,7 @@ public class ProductMenu {
         try {
             do {
                 Menu.print("******Product Management******|1.Add Product|2.Update Product|3.Remove Product"
-                        + "|4.Print Product List|5.Back to main menu|Select :");
+                        + "|4.Print Product List|5.Remove product by quantity|6.Back to main menu|Select :");
 
                 int choice = Menu.getUserChoice();
 
@@ -45,8 +45,12 @@ public class ProductMenu {
                         System.out.println("Product list:");
                         printAllProduct();
                     }
+                    
+                    case 5 -> {
+                        deleteProductByQuantity();
+                    }
 
-                    case 5 ->
+                    case 6 ->
                         quit = true;
 
                     default ->
@@ -156,11 +160,19 @@ public class ProductMenu {
 
         do {
             newManufacturingDate = DataInput.getString("Enter new manufacturing date (dd-MM-yyyy): ");
-        } while (!DataValidation.checkNewDate(newManufacturingDate));
+            
+            if (!DataValidation.checkNewDateForUpdate(newManufacturingDate)) {
+                System.out.println("Date is invalid. The correct format is dd-MM-yyyy:");
+            }
+        } while (!DataValidation.checkNewDateForUpdate(newManufacturingDate));
 
         do {
             newExpirationDate = DataInput.getString("Enter new expiration date (dd-MM-yyyy): ");
-        } while (!DataValidation.checkNewDate(newExpirationDate));
+            
+            if (!DataValidation.checkNewDateForUpdate(newExpirationDate)) {
+                System.out.println("Date is invalid. The correct format is dd-MM-yyyy:");
+            }
+        } while (!DataValidation.checkNewDateForUpdate(newExpirationDate));
 
         listNewInformation.add(newName);
         listNewInformation.add(newQuantity);
@@ -218,6 +230,13 @@ public class ProductMenu {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+    
+    public void deleteProductByQuantity() {
+        int value = DataInput.getIntegerNumber("Enter x: ");
+        
+        service.deleteProductByQuantity(value);
+        System.out.println("Products deleted successfully.");
     }
 
     public void printAllProduct() throws Exception {

@@ -30,5 +30,20 @@ public class VehicleService implements IVehicleService {
     public List<Vehicle> getListVehicle() {
         return vehicleAction.getList();
     }
+    
+    @Override
+    public void deleteVehicle(Vehicle vehicle) {
+        vehicleAction.deleteVehicle(vehicle);
+    }
+
+    @Override
+    public Vehicle searchById(String id) {
+         return vehicleAction.searchById(id);
+    }
+
+    @Override
+    public List<Vehicle> searchByName(String name) {
+        return vehicleAction.searchByName(name);
+    }
 
 }

@@ -19,4 +19,8 @@ public interface IProductDao<Product> extends IUserDao<Product>{
     void deleteProduct(Product productDeleted) throws Exception;
     
     void saveFile() throws Exception;
+    
+    List<Product> findProductByName(String name);
+    
+    void deleteProductByQuantity(int value);
 }

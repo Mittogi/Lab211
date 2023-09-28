@@ -5,6 +5,7 @@ import application.utilities.DataValidation;
 import bussiness.entity.Vehicle;
 import bussiness.service.IVehicleService;
 import bussiness.service.VehicleService;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class MenuVehicle {
             do {
                 Menu.print("******Product Management******|1.Add new vehicle.|2.Check exits vehicle.|3.Update vehicle.|4.Delete vehicle.|5.Search vehicle.|6.Display all vehicle|7.Print all vehicle from the file.|Other.Back to main menu|Select: ");
 
-                int choice = DataInput.getIntegerNumber();
+                int choice = Menu.getUserChoice();
 
                 switch (choice) {
                     case 1 -> {
@@ -35,6 +36,14 @@ public class MenuVehicle {
 
                     case 2 -> {
                         checkToExistVehicle();
+                    }
+
+                    case 4 -> {
+                        deleteVehicle();
+                    }
+
+                    case 5 -> {
+                        searchVehicle();
                     }
 
                     case 6 -> {
@@ -133,6 +142,91 @@ public class MenuVehicle {
 
             if (!exist) {
                 System.out.println("No Vehicle Found!");
+            }
+        }
+    }
+
+    public void searchVehicle() {
+        Menu.print("******Search Vehicle******|1.Search by name.|2.Search by id|Select: ");
+
+        int choice = Menu.getUserChoice();
+
+        switch (choice) {
+            case 1 -> {
+                searchVehicleByName();
+            }
+
+            case 2 -> {
+                searchVehicleById();
+            }
+        }
+
+    }
+
+//    public void updateVehicle() {
+//        String id, name, color, price, brand, type, year;
+//
+//        id = DataInput.getString("Enter id: ");
+//        Vehicle vehicle = service.searchById(id);
+//
+//        if (vehicle == null) {
+//            System.out.println("Vehicle does not exist");
+//        } else {
+//            List<String> newListVehicleInfo = new ArrayList<>();
+//
+//            name = DataInput.getString("Enter new name: ");
+//            color = DataInput.getString("Enter new color: ");
+//            price = DataInput.getDoubleNumber("Enter new price: ");
+//            brand = DataInput.getString("Enter new brand: ");
+//            type = DataInput.getString("Enter new type: ");
+//            year = DataInput.getIntegerNumber("Enter new year: ");
+//
+//            newListVehicleInfo.add(name);
+//            newListVehicleInfo.add(color);
+//            newListVehicleInfo.add(price);
+//        }
+//
+//    }
+
+    public void deleteVehicle() {
+        String id = DataInput.getString("Enter id: ");
+
+        Vehicle vehicle = service.searchById(id);
+
+        if (vehicle == null) {
+            System.out.println("Vehicle not found");
+        } else {
+            String comfirm = DataInput.getString("Comfirm delete?(Y/N): ");
+
+            if (DataValidation.checkStringWithFormat(comfirm, "^[yY]$")) {
+                service.deleteVehicle(vehicle);
+                System.out.println("Vehicle deleted");
+            }
+        }
+    }
+
+    public void searchVehicleById() {
+        String id = DataInput.getString("Enter id: ");
+
+        Vehicle vehicleResult = service.searchById(id);
+
+        if (vehicleResult == null) {
+            System.out.println("Vehicle not found");
+        } else {
+            System.out.println(vehicleResult);
+        }
+    }
+
+    public void searchVehicleByName() {
+        String name = DataInput.getString("Enter name: ");
+
+        List<Vehicle> listVehicleReslut = service.searchByName(name);
+
+        if (listVehicleReslut.isEmpty()) {
+            System.out.println("Vehicle not found");
+        } else {
+            for (Vehicle vehicle : listVehicleReslut) {
+                System.out.println(vehicle);
             }
         }
     }

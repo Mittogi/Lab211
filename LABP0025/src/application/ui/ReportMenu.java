@@ -59,6 +59,10 @@ public class ReportMenu {
                         quit = true;
                     }
 
+//                    case 7 -> {
+//                        findProductByName();
+//                    }
+
                     default ->
                         System.out.println("Choice invalid");
                 }
@@ -95,6 +99,10 @@ public class ReportMenu {
     public void productsThatAreRunningOutOfStock() {
         List<Product> listProduct = productService.productAreRunningOutOfStock();
 
+        if (listProduct.isEmpty() == true) {
+            System.out.println("No product that are running out of stock");
+        }
+
         for (Product product : listProduct) {
             System.out.println(product);
         }
@@ -116,6 +124,19 @@ public class ReportMenu {
             for (Receipt receipt : listReceiptResult) {
                 System.out.println("Receipt code = " + receipt.getCode() + ", type = " + receipt.getType() + ", time = " + formatDateToString(receipt.getReceiptTime()));
             }
+        }
+    }
+
+    public void findProductByName() {
+        String name = DataInput.getString("Enter name: ");
+        List<Product> listProductResult = productService.findProductByName(name);
+
+        if (listProductResult.isEmpty() == true) {
+            System.out.println("No result");
+        }
+
+        for (Product product : listProductResult) {
+            System.out.println(product);
         }
     }
 

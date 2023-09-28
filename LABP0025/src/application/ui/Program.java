@@ -27,7 +27,7 @@ public class Program {
             IReceiptService<Receipt> receiptService = new ReceiptService();
 
             do {
-                Menu.print("1.Producct Management|2.Warehouse Management|3.Report|Other.Exit|Select:");
+                Menu.print("1.Producct Management|2.Warehouse Management|3.Report|4.Save|Other.Exit|Select:");
                 choice = DataInput.getIntegerNumber();
                 switch (choice) {
                     case 1 ->  {
@@ -39,6 +39,10 @@ public class Program {
                     
                     case 3 -> {
                         Menu.manageReport(receiptService, productService);
+                    }
+                    
+                    case 4 -> {
+                        Menu.saveDataToFile(receiptService, productService);
                     }
                     
                     default ->  {

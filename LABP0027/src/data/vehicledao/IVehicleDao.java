@@ -12,4 +12,10 @@ public interface IVehicleDao {
     List<Vehicle> getList();
     
     boolean addList(Vehicle vehicle);
+    
+    void deleteVehicle(Vehicle vehicle);
+    
+    Vehicle searchById(String id);
+    
+    List<Vehicle> searchByName(String name);
 }

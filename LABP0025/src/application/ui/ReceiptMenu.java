@@ -6,7 +6,6 @@ import bussiness.entity.Product;
 import bussiness.entity.Receipt;
 import bussiness.services.productservice.IProductService;
 import bussiness.services.receiptservice.IReceiptService;
-import data.factory.DaoFactory;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -110,10 +109,10 @@ public class ReceiptMenu {
         Date time;
         List<Product> listProduct = new ArrayList<>();
 
-        while((receiptCode + numberOfReceipt).length() < 7) {
+        while ((receiptCode + numberOfReceipt).length() < 7) {
             receiptCode = receiptCode + "0";
         }
-        
+
         receiptCode = receiptCode + numberOfReceipt;
 
         time = DataInput.getCurrentDate();

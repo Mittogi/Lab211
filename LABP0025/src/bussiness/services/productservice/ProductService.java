@@ -1,12 +1,10 @@
 package bussiness.services.productservice;
 
 import bussiness.entity.Product;
-import data.FileManager;
 import data.factory.DaoFactory;
 import data.factory.IDaoFactory;
 import data.productdao.IProductDao;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -43,6 +41,16 @@ public class ProductService implements IProductService<Product> {
     public Product findProduct(String code) {
         Product product = (Product) productAction.findProduct(code);
         return product;
+    }
+
+    @Override
+    public List<Product> findProductByName(String name) {
+        return productAction.findProductByName(name);
+    }
+
+    @Override
+    public void deleteProductByQuantity(int value) {
+        productAction.deleteProductByQuantity(value);
     }
 
     @Override
@@ -99,13 +107,13 @@ public class ProductService implements IProductService<Product> {
         }
 
         listProductOutOfStock.sort(
-            new Comparator<Product>() {
-                @Override
-                public int compare(Product o1, Product o2) {
-                    return o1.getQuantity() - o2.getQuantity();
-                }
-
+                new Comparator<Product>() {
+            @Override
+            public int compare(Product o1, Product o2) {
+                return o1.getQuantity() - o2.getQuantity();
             }
+
+        }
         );
 
         return listProductOutOfStock;

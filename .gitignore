@@ -89,3 +89,5 @@ fabric.properties
 .gradle
 /build
 /module
+/LABP0026/nbproject/private/
+/LABP0026/build/
