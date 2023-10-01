@@ -22,13 +22,18 @@ public class VehicleService implements IVehicleService {
     }
 
     @Override
-    public void checkExitsVehicle(String ID) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Vehicle checkExitsVehicle(String id) {
+        return vehicleAction.checkToexistVehicle(id);
     }
 
     @Override
     public List<Vehicle> getListVehicle() {
         return vehicleAction.getList();
+    }
+    
+    @Override
+    public void updateVehicle(List<String> listNewInforVehicle, Vehicle vehicle) {
+        vehicleAction.updateVehicle(listNewInforVehicle, vehicle);
     }
     
     @Override

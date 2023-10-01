@@ -40,5 +40,24 @@ public class DataValidation {
         
         return result;
     }
+    
+    public static boolean checkIntegerForUpdate(String value) {
+        boolean result = true;
+        
+        if (value.isEmpty()) {
+            return true;
+        }
+        
+        try {
+            int number = Integer.parseInt(value);
+            
+            if (number < 0) {
+                result = false;
+            }
+        } catch (NumberFormatException e) {
+            result = false;
+        }
+        return result;
+    }
 //------------------------------------------------------------------------------
 }

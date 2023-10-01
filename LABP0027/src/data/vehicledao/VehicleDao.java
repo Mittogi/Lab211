@@ -27,6 +27,54 @@ public class VehicleDao implements IVehicleDao{
     }
     
     @Override
+    public Vehicle checkToexistVehicle(String id) {
+        Vehicle vehicle = null; 
+        
+        for (Vehicle vehicleEmp : listVehicle) {
+            if (vehicleEmp.getId().equalsIgnoreCase(id)) {
+                vehicle = vehicleEmp;
+                break;
+            }
+        }
+        
+        return vehicle;
+     }
+    
+    @Override
+    public void updateVehicle(List<String> listNewInforVehicle, Vehicle vehicleUpdated) {
+        String name = listNewInforVehicle.get(0);
+        String color = listNewInforVehicle.get(1);
+        String price = listNewInforVehicle.get(2);
+        String brand = listNewInforVehicle.get(3);
+        String type = listNewInforVehicle.get(4);
+        String year = listNewInforVehicle.get(5);
+        
+        if (!name.equals("")) {
+            vehicleUpdated.setName(name);
+        }
+        
+        if (!color.equals("")) {
+            vehicleUpdated.setColor(color);
+        }
+        
+        if (!price.equals("")) {
+            vehicleUpdated.setPrice(Integer.parseInt(price));
+        }
+        
+        if (!brand.equals("")) {
+            vehicleUpdated.setBrand(brand);
+        }
+        
+        if (!type.equals("")) {
+            vehicleUpdated.setType(type);
+        }
+        
+        if (!year.equals("")) {
+            vehicleUpdated.setYear(Integer.parseInt(year));
+        }
+    }
+    
+    @Override
     public void deleteVehicle(Vehicle vehicle) {
         getList().remove(vehicle);
     }

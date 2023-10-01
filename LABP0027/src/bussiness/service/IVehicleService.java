@@ -6,9 +6,11 @@ import java.util.List;
 public interface IVehicleService {
     void addVehicle(Vehicle vehicle) throws Exception;
     
-    void checkExitsVehicle(String ID);
+    Vehicle checkExitsVehicle(String id);
     
     List<Vehicle> getListVehicle();
+    
+    void updateVehicle(List<String> listNewInforVehicle, Vehicle vehicle);
     
     void deleteVehicle(Vehicle vehicle);
     

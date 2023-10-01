@@ -38,6 +38,10 @@ public class MenuVehicle {
                         checkToExistVehicle();
                     }
 
+                    case 3 -> {
+                        updateVehicle();
+                    }
+                    
                     case 4 -> {
                         deleteVehicle();
                     }
@@ -128,21 +132,14 @@ public class MenuVehicle {
     }
 
     public void checkToExistVehicle() {
-        List<Vehicle> listVehicle = service.getListVehicle();
-        boolean exist = false;
-
         String id = DataInput.getString("Enter id:");
-
-        for (Vehicle vehicle : listVehicle) {
-            if (vehicle.getId().equalsIgnoreCase(id)) {
-                exist = true;
-                System.out.println(vehicle);
-                break;
-            }
-
-            if (!exist) {
-                System.out.println("No Vehicle Found!");
-            }
+        
+        Vehicle vehicle = service.checkExitsVehicle(id);
+        
+        if (vehicle == null) {
+            System.out.println("No Vehicle Found!");
+        } else {
+            System.out.println(vehicle);
         }
     }
 
@@ -163,30 +160,57 @@ public class MenuVehicle {
 
     }
 
-//    public void updateVehicle() {
-//        String id, name, color, price, brand, type, year;
-//
-//        id = DataInput.getString("Enter id: ");
-//        Vehicle vehicle = service.searchById(id);
-//
-//        if (vehicle == null) {
-//            System.out.println("Vehicle does not exist");
-//        } else {
-//            List<String> newListVehicleInfo = new ArrayList<>();
-//
-//            name = DataInput.getString("Enter new name: ");
-//            color = DataInput.getString("Enter new color: ");
-//            price = DataInput.getDoubleNumber("Enter new price: ");
-//            brand = DataInput.getString("Enter new brand: ");
-//            type = DataInput.getString("Enter new type: ");
-//            year = DataInput.getIntegerNumber("Enter new year: ");
-//
-//            newListVehicleInfo.add(name);
-//            newListVehicleInfo.add(color);
-//            newListVehicleInfo.add(price);
-//        }
-//
-//    }
+    public void updateVehicle() {
+        String id, name, color, price, brand, type, year;
+        List<String> listNewInfoVehicle = new ArrayList<>();
+
+        id = DataInput.getString("Enter id: ");
+        Vehicle vehicle = service.searchById(id);
+
+        if (vehicle == null) {
+            System.out.println("Vehicle does not exist");
+        } else {
+            name = DataInput.getString("Enter new name: ").toUpperCase();
+
+            color = DataInput.getString("Enter new color: ").toUpperCase();
+
+            do {
+                price = DataInput.getString("Enter new price: ");
+
+                if (!DataValidation.checkIntegerForUpdate(price)) {
+                    System.out.println("Price invalid");
+                } else {
+                    break;
+                }
+            } while (true);
+
+            brand = DataInput.getString("Enter new brand: ").toUpperCase();
+
+            type = DataInput.getString("Enter new type: ").toUpperCase();
+
+            do {
+                year = DataInput.getString("Enter new year: ");
+
+                if (!DataValidation.checkIntegerForUpdate(year)) {
+                    System.out.println("Year invalid");
+                } else {
+                    break;
+                }
+            } while (true);
+
+            listNewInfoVehicle.add(name);
+            listNewInfoVehicle.add(color);
+            listNewInfoVehicle.add(price);
+            listNewInfoVehicle.add(brand);
+            listNewInfoVehicle.add(type);
+            listNewInfoVehicle.add(year);
+            
+            service.updateVehicle(listNewInfoVehicle, vehicle);
+            
+            System.out.println("Vehicle updated");
+        }
+
+    }
 
     public void deleteVehicle() {
         String id = DataInput.getString("Enter id: ");

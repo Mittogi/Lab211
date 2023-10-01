@@ -13,6 +13,10 @@ public interface IVehicleDao {
     
     boolean addList(Vehicle vehicle);
     
+    Vehicle checkToexistVehicle(String id);
+    
+    void updateVehicle(List<String> listNewInforVehicle, Vehicle vehicle);
+    
     void deleteVehicle(Vehicle vehicle);
     
     Vehicle searchById(String id);
