@@ -27,11 +27,6 @@ public class VehicleService implements IVehicleService {
     }
 
     @Override
-    public List<Vehicle> getListVehicle() {
-        return vehicleAction.getList();
-    }
-    
-    @Override
     public void updateVehicle(List<String> listNewInforVehicle, Vehicle vehicle) {
         vehicleAction.updateVehicle(listNewInforVehicle, vehicle);
     }
@@ -50,5 +45,20 @@ public class VehicleService implements IVehicleService {
     public List<Vehicle> searchByName(String name) {
         return vehicleAction.searchByName(name);
     }
+       
+    @Override
+    public List<Vehicle> getListVehicle() {
+        return vehicleAction.getList();
+    }
 
+    @Override
+    public List<Vehicle> getListSortByYear(int year) {
+        return vehicleAction.listSortWithYear(year);
+    }
+
+    @Override
+    public boolean saveToFile() throws Exception {
+        return vehicleAction.saveToFile();
+    }
+    
 }

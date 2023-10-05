@@ -53,7 +53,9 @@ public class MenuVehicle {
                     case 6 -> {
                         displayAllVehicle();
                     }
-
+                    case 7 -> {
+                        printAllSortByYear();
+                    }
                     default -> {
                         quit = true;
                     }
@@ -266,5 +268,18 @@ public class MenuVehicle {
         for (Vehicle vehicle : listVehicle) {
             System.out.println(vehicle);
         }
+    }
+    public void printAllSortByYear(){
+        int year, lenght;
+        year = DataInput.getIntegerNumber("Enter year:");
+        List<Vehicle> listCheck = service.getListSortByYear(year);
+        lenght = listCheck.size();
+
+        if (lenght != 0){
+            for (Vehicle vehicle : listCheck) {
+                System.out.println(vehicle);
+            }
+        } else System.out.println("List emty");
+
     }
 }

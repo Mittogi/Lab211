@@ -17,4 +17,8 @@ public interface IVehicleService {
     Vehicle searchById(String id);
     
     List<Vehicle> searchByName(String name);
+
+    List<Vehicle> getListSortByYear(int year);
+
+    boolean saveToFile() throws Exception;
 }

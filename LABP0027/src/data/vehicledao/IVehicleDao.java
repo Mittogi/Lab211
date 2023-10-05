@@ -22,4 +22,8 @@ public interface IVehicleDao {
     Vehicle searchById(String id);
     
     List<Vehicle> searchByName(String name);
+
+    List<Vehicle> listSortWithYear(int year);
+
+    boolean saveToFile();
 }

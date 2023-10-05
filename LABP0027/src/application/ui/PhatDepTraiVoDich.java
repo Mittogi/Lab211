@@ -32,6 +32,9 @@ public class PhatDepTraiVoDich {
                     }
 
                     case 2 -> {
+                        if (service.saveToFile()){
+                            System.out.println("Save successfully!");
+                        } else System.out.println("Save failed!");
                     }
                     
                     default -> {
