@@ -6,6 +6,7 @@ import bussiness.entity.Vehicle;
 import bussiness.service.IVehicleService;
 import bussiness.service.VehicleService;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -25,7 +26,8 @@ public class MenuVehicle {
 
         try {
             do {
-                Menu.print("******Product Management******|1.Add new vehicle.|2.Check exits vehicle.|3.Update vehicle.|4.Delete vehicle.|5.Search vehicle.|6.Display all vehicle|7.Print all vehicle from the file.|Other.Back to main menu|Select: ");
+                Menu.print(
+                        "******Product Management******|1.Add new vehicle.|2.Check exits vehicle.|3.Update vehicle.|4.Delete vehicle.|5.Search vehicle.|6.Display vehicle list|7.Print vehicle list.|Other.Back to main menu|Select: ");
 
                 int choice = Menu.getUserChoice();
 
@@ -41,7 +43,7 @@ public class MenuVehicle {
                     case 3 -> {
                         updateVehicle();
                     }
-                    
+
                     case 4 -> {
                         deleteVehicle();
                     }
@@ -51,11 +53,17 @@ public class MenuVehicle {
                     }
 
                     case 6 -> {
-                        displayAllVehicle();
+                        displayVehicleList();
                     }
+                    
                     case 7 -> {
-                        printAllSortByYear();
+                        printVehicleList();
                     }
+
+                    case 8 -> {
+                        updatePriceByBrand();
+                    }
+
                     default -> {
                         quit = true;
                     }
@@ -85,7 +93,8 @@ public class MenuVehicle {
             if (DataValidation.checkStringIsDulicated(service.getListVehicle(), id)) {
                 System.out.println("Id is dulicated");
             }
-        } while (!DataValidation.checkStringWithFormat(id, "\\d{5}") || DataValidation.checkStringIsDulicated(service.getListVehicle(), id));
+        } while (!DataValidation.checkStringWithFormat(id, "\\d{5}")
+                || DataValidation.checkStringIsDulicated(service.getListVehicle(), id));
 
         do {
             name = DataInput.getString("Enter name: ").toUpperCase();
@@ -103,7 +112,13 @@ public class MenuVehicle {
             }
         } while (DataValidation.checkValueIsEmpty(color));
 
-        price = DataInput.getDoubleNumber("Enter price: ");
+        do {
+            price = DataInput.getDoubleNumber("Enter price: ");
+
+            if (price < 0) {
+                System.out.println("Price is not smaller than 0");
+            }
+        } while (price < 0.0);
 
         do {
             brand = DataInput.getString("Enter brand: ").toUpperCase();
@@ -121,8 +136,13 @@ public class MenuVehicle {
             }
         } while (DataValidation.checkValueIsEmpty(type));
 
-        year = DataInput.getIntegerNumber("Enter year: ");
+        do {
+            year = DataInput.getIntegerNumber("Enter year: ");
 
+            if (year < 1950 || year > 2023) {
+                System.out.println("Year invalid, min year is 1950 and max year is 2023");
+            }
+        } while (year < 1950 || year > 2023);
         Vehicle vehicle = new Vehicle(id, name, color, price, brand, type, year);
 
         try {
@@ -135,11 +155,11 @@ public class MenuVehicle {
 
     public void checkToExistVehicle() {
         String id = DataInput.getString("Enter id:");
-        
+
         Vehicle vehicle = service.checkExitsVehicle(id);
-        
+
         if (vehicle == null) {
-            System.out.println("No Vehicle Found!");
+            System.out.println("No Vehicle Found In File!");
         } else {
             System.out.println(vehicle);
         }
@@ -179,7 +199,7 @@ public class MenuVehicle {
             do {
                 price = DataInput.getString("Enter new price: ");
 
-                if (!DataValidation.checkIntegerForUpdate(price)) {
+                if (!DataValidation.checkDoubleForUpdate(price)) {
                     System.out.println("Price invalid");
                 } else {
                     break;
@@ -193,8 +213,8 @@ public class MenuVehicle {
             do {
                 year = DataInput.getString("Enter new year: ");
 
-                if (!DataValidation.checkIntegerForUpdate(year)) {
-                    System.out.println("Year invalid");
+                if (!DataValidation.checkIntegerForUpdate(year, 1950, 2023)) {
+                    System.out.println("Year invalid. Year is interger number, year >= 1950 and <=2023");
                 } else {
                     break;
                 }
@@ -206,9 +226,9 @@ public class MenuVehicle {
             listNewInfoVehicle.add(brand);
             listNewInfoVehicle.add(type);
             listNewInfoVehicle.add(year);
-            
+
             service.updateVehicle(listNewInfoVehicle, vehicle);
-            
+
             System.out.println("Vehicle updated");
         }
 
@@ -244,15 +264,43 @@ public class MenuVehicle {
     }
 
     public void searchVehicleByName() {
-        String name = DataInput.getString("Enter name: ");
+        String name = DataInput.getString("Enter name: ").toUpperCase();
 
         List<Vehicle> listVehicleReslut = service.searchByName(name);
 
-        if (listVehicleReslut.isEmpty()) {
+        listVehicleReslut.sort(
+                new Comparator<Vehicle>() {
+
+                    @Override
+                    public int compare(Vehicle o1, Vehicle o2) {
+                        return o2.getName().compareTo(o1.getName());
+                    }
+
+                });
+
+        if (listVehicleReslut.isEmpty())
+
+        {
             System.out.println("Vehicle not found");
         } else {
             for (Vehicle vehicle : listVehicleReslut) {
                 System.out.println(vehicle);
+            }
+        }
+    }
+
+    public void displayVehicleList() {
+        Menu.print("******Display Vehicle List******|1.Show all vehicle.|2.Show vehicle by price|Select: ");
+
+        int choice = Menu.getUserChoice();
+
+        switch (choice) {
+            case 1 -> {
+                displayAllVehicle();
+            }
+
+            case 2 -> {
+                displayVehicleByPrice();
             }
         }
     }
@@ -269,17 +317,74 @@ public class MenuVehicle {
             System.out.println(vehicle);
         }
     }
-    public void printAllSortByYear(){
+
+    public void displayVehicleByPrice() {
+        Double price = DataInput.getDoubleNumber("Enter price: ");
+        List<Vehicle> listVehicle = service.searchByLessThanPrice(price);
+
+        listVehicle.sort(
+                new Comparator<Vehicle>() {
+
+                    @Override
+                    public int compare(Vehicle o1, Vehicle o2) {
+                        if (o2.getPrice() > o1.getPrice()) {
+                            return 1;
+                        }
+
+                        return -1;
+                    }
+                }
+
+        );
+
+        if (listVehicle.isEmpty()) {
+            System.out.println("List is empty");
+        }
+
+        for (Vehicle vehicle : listVehicle) {
+            System.out.println(vehicle);
+        }
+    }
+
+    public void printVehicleList() {
+        Menu.print("******Print Vehicle List******|1.Print all vehicle.|2.Print vehicle by year|Select: ");
+
+        int choice = Menu.getUserChoice();
+
+        switch (choice) {
+            case 1 -> {
+                displayAllVehicle();
+            }
+
+            case 2 -> {
+                printAllSortByYear();
+            }
+        }
+    }
+
+    public void printAllSortByYear() {
         int year, lenght;
         year = DataInput.getIntegerNumber("Enter year:");
         List<Vehicle> listCheck = service.getListSortByYear(year);
         lenght = listCheck.size();
 
-        if (lenght != 0){
+        if (lenght != 0) {
             for (Vehicle vehicle : listCheck) {
                 System.out.println(vehicle);
             }
-        } else System.out.println("List emty");
+        } else
+            System.out.println("List empty");
 
     }
+
+//11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+    public void updatePriceByBrand() {
+        String brand = DataInput.getString("Enter brand: ");
+        List<Vehicle> listVehicleUpdate = service.searchByBrand(brand);
+
+        for (Vehicle vehicle : listVehicleUpdate) {
+            System.out.println(vehicle);
+        }
+    }
 }
+

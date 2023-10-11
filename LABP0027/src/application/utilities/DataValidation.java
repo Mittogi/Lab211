@@ -41,7 +41,7 @@ public class DataValidation {
         return result;
     }
     
-    public static boolean checkIntegerForUpdate(String value) {
+    public static boolean checkIntegerForUpdate(String value, int min, int max) {
         boolean result = true;
         
         if (value.isEmpty()) {
@@ -51,7 +51,26 @@ public class DataValidation {
         try {
             int number = Integer.parseInt(value);
             
-            if (number < 0) {
+            if (!checkNumberInRange(number, min, max)) {
+                result = false;
+            }
+        } catch (NumberFormatException e) {
+            result = false;
+        }
+        return result;
+    }
+
+        public static boolean checkDoubleForUpdate(String value) {
+        boolean result = true;
+        
+        if (value.isEmpty()) {
+            return true;
+        }
+        
+        try {
+            double number = Double.parseDouble(value);
+            
+            if (number < 0.0) {
                 result = false;
             }
         } catch (NumberFormatException e) {

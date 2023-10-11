@@ -1,7 +1,6 @@
 package application.ui;
 
 import application.utilities.DataInput;
-import bussiness.entity.Vehicle;
 import bussiness.service.IVehicleService;
 import bussiness.service.VehicleService;
 import java.util.Collections;

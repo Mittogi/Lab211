@@ -83,6 +83,4 @@ public class Vehicle {
     public String toString() {
         return id + ", " + name + ", " + color + ", " + price + ", " + brand + ", " + type + ", " + year;
     }
-    
-
 }

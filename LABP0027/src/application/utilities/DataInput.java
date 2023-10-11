@@ -7,10 +7,10 @@ import java.util.Scanner;
  * @author PHAT
  */
 public class DataInput {
+    static Scanner sc = new Scanner(System.in);
 
     public static int getIntegerNumber(String displayMessage) {
         int number;
-        Scanner sc = new Scanner(System.in);
 
         while (true) {
             try {
@@ -26,7 +26,6 @@ public class DataInput {
 
     public static int getIntegerNumber() {
         int number;
-        Scanner sc = new Scanner(System.in);
 
         while (true) {
             try {
@@ -42,7 +41,6 @@ public class DataInput {
     
     public static double getDoubleNumber(String displayMessage) {
         double number;
-        Scanner sc = new Scanner(System.in);
 
         while (true) {
             try {
@@ -59,7 +57,6 @@ public class DataInput {
 
     public static String getString(String displayMessage) {
         String s;
-        Scanner sc = new Scanner(System.in);
 
         System.out.print(displayMessage);
 
@@ -70,7 +67,6 @@ public class DataInput {
 
     public static String getString() {
         String s;
-        Scanner sc = new Scanner(System.in);
 
         s = sc.nextLine();
 

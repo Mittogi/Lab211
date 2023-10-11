@@ -1,6 +1,1 @@
-data structure: limit year, price (no limit)
-
-
-function 2: check vehicle stored in file (vehicle checked in list)
-
 function 5: search by all attribute (search by id and name)

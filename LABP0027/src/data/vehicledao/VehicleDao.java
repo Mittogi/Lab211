@@ -30,7 +30,8 @@ public class VehicleDao implements IVehicleDao {
     // Read data
     public void loadDataFromFile() throws Exception {
         for (String p : vFileManager.readDataFromFile()) {
-            listVehicle.add(convertStringToVehicle(p));
+            Vehicle vehicle = convertStringToVehicle(p);
+            listVehicle.add(vehicle);
         }
     }
 
@@ -59,6 +60,7 @@ public class VehicleDao implements IVehicleDao {
                 String line = vehicle.toString() + "\n";
                 rawList.add(line);
             }
+
             vFileManager.commitFile(rawList);
             return true;
         } catch (Exception e) {
@@ -80,8 +82,17 @@ public class VehicleDao implements IVehicleDao {
     @Override
     public Vehicle checkToexistVehicle(String id) {
         Vehicle vehicle = null;
+        List<Vehicle> listFromFile = new ArrayList<>();
 
-        for (Vehicle vehicleEmp : listVehicle) {
+        try {
+            for (String p : vFileManager.readDataFromFile()) {
+                listFromFile.add(convertStringToVehicle(p));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        for (Vehicle vehicleEmp : listFromFile) {
             if (vehicleEmp.getId().equalsIgnoreCase(id)) {
                 vehicle = vehicleEmp;
                 break;
@@ -100,27 +111,27 @@ public class VehicleDao implements IVehicleDao {
         String type = listNewInforVehicle.get(4);
         String year = listNewInforVehicle.get(5);
 
-        if (!name.equals("")) {
+        if (!name.isBlank()) {
             vehicleUpdated.setName(name);
         }
 
-        if (!color.equals("")) {
+        if (!color.isBlank()) {
             vehicleUpdated.setColor(color);
         }
 
-        if (!price.equals("")) {
-            vehicleUpdated.setPrice(Integer.parseInt(price));
+        if (!price.isBlank()) {
+            vehicleUpdated.setPrice(Double.parseDouble(price));
         }
 
-        if (!brand.equals("")) {
+        if (!brand.isBlank()) {
             vehicleUpdated.setBrand(brand);
         }
 
-        if (!type.equals("")) {
+        if (!type.isBlank()) {
             vehicleUpdated.setType(type);
         }
 
-        if (!year.equals("")) {
+        if (!year.isBlank()) {
             vehicleUpdated.setYear(Integer.parseInt(year));
         }
     }
@@ -150,7 +161,7 @@ public class VehicleDao implements IVehicleDao {
         List<Vehicle> listVehicle = getList();
 
         for (Vehicle vehicle : listVehicle) {
-            if (vehicle.getName().equalsIgnoreCase(name)) {
+            if (vehicle.getName().contains(name)) {
                 listVehicleResult.add(vehicle);
             }
         }
@@ -158,27 +169,98 @@ public class VehicleDao implements IVehicleDao {
         return listVehicleResult;
     }
 
+    @Override
+    public List<Vehicle> searchByColor(String color) {
+        List<Vehicle> listVehicleResult = new ArrayList<>();
+        List<Vehicle> listVehicle = getList();
+
+        for (Vehicle vehicle : listVehicle) {
+            if (vehicle.getColor().equalsIgnoreCase(color)) {
+                listVehicleResult.add(vehicle);
+            }
+        }
+
+        return listVehicleResult;
+    }
+
+    @Override
+    public List<Vehicle> searchByPrice(double price) {
+        List<Vehicle> listVehicleResult = new ArrayList<>();
+        List<Vehicle> listVehicle = getList();
+
+        for (Vehicle vehicle : listVehicle) {
+            if (vehicle.getPrice() == price) {
+                listVehicleResult.add(vehicle);
+            }
+        }
+
+        return listVehicleResult;
+    }
+
+    @Override
+    public List<Vehicle> searchByLessThanPrice(double price) {
+        List<Vehicle> listVehicleResult = new ArrayList<>();
+        List<Vehicle> listVehicle = getList();
+
+        for (Vehicle vehicle : listVehicle) {
+            if (vehicle.getPrice() < price) {
+                listVehicleResult.add(vehicle);
+            }
+        }
+
+        return listVehicleResult;
+    }
+
+    @Override
+    public List<Vehicle> searchByBrand(String brand) {
+        List<Vehicle> listVehicleResult = new ArrayList<>();
+        List<Vehicle> listVehicle = getList();
+
+        for (Vehicle vehicle : listVehicle) {
+            if (vehicle.getBrand().equalsIgnoreCase(brand)) {
+                listVehicleResult.add(vehicle);
+            }
+        }
+
+        return listVehicleResult;
+    }
+
+    @Override
+    public List<Vehicle> searchByYear(int year) {
+        List<Vehicle> listVehicleResult = new ArrayList<>();
+        List<Vehicle> listVehicle = getList();
+
+        for (Vehicle vehicle : listVehicle) {
+            if (vehicle.getYear() == year) {
+                listVehicleResult.add(vehicle);
+            }
+        }
+
+        return listVehicleResult;
+    }
+
+    @Override
+    public List<Vehicle> searchByGreaterEqualThanYear(int year) {
+        List<Vehicle> listVehicleResult = new ArrayList<>();
+        List<Vehicle> listVehicle = getList();
+
+        for (Vehicle vehicle : listVehicle) {
+            if (vehicle.getYear() >= year) {
+                listVehicleResult.add(vehicle);
+            }
+        }
+
+        return listVehicleResult;
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------------------------
+
     // Funtion 8:
     @Override
     public List<Vehicle> listSortWithYear(int year) {
-        List<Vehicle> listFromFile = new ArrayList<>();
-        try {
-            for (String p : vFileManager.readDataFromFile()) {
-                listFromFile.add(convertStringToVehicle(p));
-            }
-        } catch (Exception e) {
-           System.out.println(e);
-        }
+        List<Vehicle> listCheck = searchByGreaterEqualThanYear(year);
 
-        List<Vehicle> listCheck = new ArrayList<>();
-
-        for (Vehicle vehicle : listFromFile) {
-            if (vehicle.getYear() >= year) {
-                listCheck.add(vehicle);
-            }
-        }
         listCheck.sort(new Comparator<Vehicle>() {
-
             @Override
             public int compare(Vehicle o1, Vehicle o2) {
                 return o2.getYear() - o1.getYear();
